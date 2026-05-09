@@ -16,10 +16,11 @@ pub fn takagi_decomposition(
     );
 
     let eigen = SymmetricEigen::new(adjacency_matrix);
+    let eigenvalues = eigen.eigenvalues;
 
-    let takagi_eigenvalues: DVector<f64> = eigen.eigenvalues.map(|x| x.abs());
+    let takagi_eigenvalues: DVector<f64> = eigenvalues.map(|x| x.abs());
 
-    let signs: DVector<f64> = takagi_eigenvalues.map(|x| (-1.0f64).powf(1.0 + heaviside(x, 1.0)));
+    let signs: DVector<f64> = eigenvalues.map(|x| (-1.0f64).powf(1.0 + heaviside(x, 1.0)));
     let phases: DVector<Complex<f64>> = signs.map(|x| Complex::new(x, 0.0).sqrt());
 
     // let uc = eigen.eigenvectors * DMatrix::from_diagonal(&phases);
